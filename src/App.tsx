@@ -7,34 +7,46 @@ const client = generateClient<Schema>();
 
 function App() {
     const { signOut } = useAuthenticator();
-  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
+     const employeeId = '10005315'; 
+    const [tasks, setTasks] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [noTasksMessage, setNoTasksMessage] = useState(false);
+    const fetchTasksForEmployee = async (employeeId) => {
+        setLoading(true);
+        setTasks([]);
+        setNoTasksMessage(false);
+        try {
+            const apiUrl = `https://aehcu90kr8.execute-api.ap-south-1.amazonaws.com/default/Test5?EmployeeID=${encodeURIComponent(employeeId)}`;
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            const data = await response.text();
+            if (data.trim() !== '') {
+                setTasks(data);
+                setNoTasksMessage(false);
+            } else {
+                setNoTasksMessage(true);
+            }
+        } catch (error) {
+            console.error('Error fetching tasks:', error);
+            setMessagePopup({ show: true, content: 'Failed to fetch tasks.' });
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  useEffect(() => {
-    client.models.Todo.observeQuery().subscribe({
-      next: (data) => setTodos([...data.items]),
-    });
-  }, []);
-
-  function createTodo() {
-    client.models.Todo.create({ content: window.prompt("Todo content") });
-  }
 
   return (
     <main>
-      <h1>My todos</h1>
-      <button onClick={createTodo}>+ new</button>
-      <ul>
-        {todos.map((todo) => (
-          <li key={todo.id}>{todo.content}</li>
-        ))}
-      </ul>
-      <div>
-        🥳 App successfully hosted. Try creating a new todo.
-        <br />
-        <a href="https://docs.amplify.aws/react/start/quickstart/#make-frontend-updates">
-          Review next step of this tutorial.
-        </a>
-      </div>
+      <h1>Employee Task List</h1>
+      {loading && <div id="loading">Loading tasks...</div>}
+            <div id="cardContainer" dangerouslySetInnerHTML={{ __html: tasks }} />
+            {noTasksMessage && <div id="noTasksMessage">No tasks found for the Employee ID.</div>}
+            <div id="buttonContainer">
+                <button>Add Task</button>&nbsp;&nbsp;
+                <button>Remove Task</button>
+            </div>
             <button onClick={signOut}>Sign out</button>
     </main>
   );
