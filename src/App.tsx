@@ -7,20 +7,26 @@ const client = generateClient<Schema>();
 
 function App() {
     const { signOut } = useAuthenticator();
-     const employeeId = '10005315'; 
-    const [tasks, setTasks] = useState([]);
+    const employeeId = '10005315'; 
+    const [tasks, setTasks] = useState<string>(''); // Assuming tasks is HTML
     const [loading, setLoading] = useState(false);
     const [noTasksMessage, setNoTasksMessage] = useState(false);
-    const fetchTasksForEmployee = async (employeeId) => {
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+    const fetchTasksForEmployee = async (employeeId: string) => {
         setLoading(true);
-        setTasks([]);
+        setTasks('');
         setNoTasksMessage(false);
+        setErrorMessage(null);
+
         try {
             const apiUrl = `https://aehcu90kr8.execute-api.ap-south-1.amazonaws.com/default/Test5?EmployeeID=${encodeURIComponent(employeeId)}`;
             const response = await fetch(apiUrl);
+            
             if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
+                throw new Error(`Network response was not ok: ${response.statusText}`);
             }
+
             const data = await response.text();
             if (data.trim() !== '') {
                 setTasks(data);
@@ -30,26 +36,35 @@ function App() {
             }
         } catch (error) {
             console.error('Error fetching tasks:', error);
-            setMessagePopup({ show: true, content: 'Failed to fetch tasks.' });
+            setErrorMessage('Failed to fetch tasks.');
         } finally {
             setLoading(false);
         }
     };
 
+    useEffect(() => {
+        fetchTasksForEmployee(employeeId);
+    }, [employeeId]);
 
-  return (
-    <main>
-      <h1>Employee Task List</h1>
-      {loading && <div id="loading">Loading tasks...</div>}
+    return (
+        <main>
+            <h1>Employee Task List</h1>
+            
+            {loading && <div id="loading">Loading tasks...</div>}
+            {errorMessage && <div id="errorMessage">{errorMessage}</div>}
+
             <div id="cardContainer" dangerouslySetInnerHTML={{ __html: tasks }} />
+            
             {noTasksMessage && <div id="noTasksMessage">No tasks found for the Employee ID.</div>}
+            
             <div id="buttonContainer">
                 <button>Add Task</button>&nbsp;&nbsp;
                 <button>Remove Task</button>
             </div>
+            
             <button onClick={signOut}>Sign out</button>
-    </main>
-  );
+        </main>
+    );
 }
 
 export default App;
