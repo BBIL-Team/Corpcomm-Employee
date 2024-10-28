@@ -93,23 +93,24 @@ function App() {
         }
     };
 
-    const populatePopupTable = () => {
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = tasks;
-        const rows = tempDiv.querySelectorAll('tr');
+   const populatePopupTable = () => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = tasks;
+    const rows = tempDiv.querySelectorAll('tr');
 
-        const tasksArray: Task[] = Array.from(rows).slice(1).map(row => ({
-            employeeName: row.children[1]?.innerText || '',
-            taskDescription: row.children[2]?.innerText || '',
-            startDate: row.children[3]?.innerText || '',
-            endDate: row.children[4]?.innerText || '',
-            rating: row.children[5]?.innerText || '',
-            remarks: row.children[6]?.innerText || '',
-            row: row as HTMLTableRowElement,
-        }));
+    const tasksArray: Task[] = Array.from(rows).slice(1).map(row => ({
+        employeeName: (row.children[1] as HTMLElement).innerText || '',
+        taskDescription: (row.children[2] as HTMLElement).innerText || '',
+        startDate: (row.children[3] as HTMLElement).innerText || '',
+        endDate: (row.children[4] as HTMLElement).innerText || '',
+        rating: (row.children[5] as HTMLElement).innerText || '',
+        remarks: (row.children[6] as HTMLElement).innerText || '',
+        row: row as HTMLTableRowElement,
+    }));
 
-        setPopupTasks(tasksArray);
-    };
+    setPopupTasks(tasksArray);
+};
+
 
     const removeTask = async (employeeName: string, taskDescription: string) => {
         const apiUrl = 'https://oje3cr7sy2.execute-api.ap-south-1.amazonaws.com/V1/RemoveTask';
