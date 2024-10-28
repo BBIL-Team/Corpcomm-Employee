@@ -4,7 +4,7 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 function App() {
     const { signOut } = useAuthenticator();
     const employeeId = '10005315'; 
-    const [tasks, setTasks] = useState<string>(''); // Assuming tasks is HTML
+    const [tasks, setTasks] = useState<string>(''); 
     const [loading, setLoading] = useState(false);
     const [noTasksMessage, setNoTasksMessage] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -132,7 +132,14 @@ function App() {
                         </form>
                     </div>
                 </>
-            )}   
+            )}
+
+            {messagePopup.show && (
+                <div className="popup">
+                    <p>{messagePopup.content}</p>
+                    <button onClick={() => setMessagePopup({ ...messagePopup, show: false })}>Close</button>
+                </div>
+            )}
             
             <button onClick={signOut}>Sign out</button>
         </main>
