@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react";
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
+interface Task {
+    employeeName: string;
+    taskDescription: string;
+    startDate: string;
+    endDate: string;
+    rating: string;
+    remarks: string;
+    row: HTMLTableRowElement;
+}
+
 function App() {
     const { signOut } = useAuthenticator();
     const employeeId = '10005315'; 
@@ -10,7 +20,7 @@ function App() {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [showAddPopup, setShowAddPopup] = useState(false);
     const [showRemovePopup, setShowRemovePopup] = useState(false);
-    const [popupTasks, setPopupTasks] = useState([]);
+    const [popupTasks, setPopupTasks] = useState<Task[]>([]);
     const [messagePopup, setMessagePopup] = useState<{ show: boolean, content: string }>({ show: false, content: '' });
 
     const fetchTasksForEmployee = async (employeeId: string) => {
@@ -34,7 +44,7 @@ function App() {
             } else {
                 setNoTasksMessage(true);
             }
-        } catch (error) {
+        } catch (error: unknown) {  // Update to handle 'unknown' type
             console.error('Error fetching tasks:', error);
             setErrorMessage('Failed to fetch tasks.');
         } finally {
@@ -88,14 +98,14 @@ function App() {
         tempDiv.innerHTML = tasks;
         const rows = tempDiv.querySelectorAll('tr');
 
-        const tasksArray = Array.from(rows).slice(1).map(row => ({
-            employeeName: (row.children[1] as HTMLElement)?.innerText || '',
-            taskDescription: (row.children[2] as HTMLElement)?.innerText || '',
-            startDate: (row.children[3] as HTMLElement)?.innerText || '',
-            endDate: (row.children[4] as HTMLElement)?.innerText || '',
-            rating: (row.children[5] as HTMLElement)?.innerText || '',
-            remarks: (row.children[6] as HTMLElement)?.innerText || '',
-            row,
+        const tasksArray: Task[] = Array.from(rows).slice(1).map(row => ({
+            employeeName: row.children[1]?.innerText || '',
+            taskDescription: row.children[2]?.innerText || '',
+            startDate: row.children[3]?.innerText || '',
+            endDate: row.children[4]?.innerText || '',
+            rating: row.children[5]?.innerText || '',
+            remarks: row.children[6]?.innerText || '',
+            row: row as HTMLTableRowElement,
         }));
 
         setPopupTasks(tasksArray);
