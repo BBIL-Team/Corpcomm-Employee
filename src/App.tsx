@@ -42,6 +42,51 @@ function App() {
         fetchTasksForEmployee(employeeId);
     }, [employeeId]);
 
+    const showAddTaskPopup = () => setShowAddPopup(true);
+
+        const handleAddTask = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const params = new URLSearchParams(formData).toString();
+
+        try {
+            const response = await fetch(e.target.action, {
+                method: e.target.method,
+                headers: {
+                    'Content-Type': e.target.enctype,
+                },
+                body: params,
+            });
+
+            const result = await response.json();
+            setMessagePopup({ show: true, content: result.message });
+            closePopup();
+            fetchTasksForEmployee(employeeId);
+        } catch (error) {
+            console.error('Error adding task:', error);
+            setMessagePopup({ show: true, content: 'Failed to add task.' });
+        }
+    };
+
+    const populatePopupTable = () => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = tasks;
+        const rows = tempDiv.querySelectorAll('tr');
+
+        const tasksArray = Array.from(rows).slice(1).map(row => ({
+            employeeName: row.children[1]?.innerText || '',
+            taskDescription: row.children[2]?.innerText || '',
+            startDate: row.children[3]?.innerText || '',
+            endDate: row.children[4]?.innerText || '',
+            rating: row.children[5]?.innerText || '',
+            remarks: row.children[6]?.innerText || '',
+            row,
+        }));
+
+        setPopupTasks(tasksArray);
+    };
+
+
     return (
         <main>
             <h1>Employee Task List</h1>
@@ -54,10 +99,36 @@ function App() {
             {noTasksMessage && <div id="noTasksMessage">No tasks found for the Employee ID.</div>}
             
             <div id="buttonContainer">
-                <button>Add Task</button>&nbsp;&nbsp;
+                <button onClick={showAddTaskPopup>Add Task</button>&nbsp;&nbsp;
                 <button>Remove Task</button>
             </div>
-            
+                {showAddPopup && (
+    <>
+        <div className="overlay" onClick={closePopup}></div>
+        <div className={`popup ${showAddPopup ? 'show' : ''}`}>
+            <h3>Add New Task</h3>
+            <form id="taskForm" action="https://bi3hh9apo0.execute-api.ap-south-1.amazonaws.com/S1/Addtask" method="POST" onSubmit={handleAddTask}>
+                <label htmlFor="employeeID">Employee ID:</label>
+                <input type="text" id="employeeID" name="eID" required />
+                
+                <label htmlFor="employeeName">Employee Name:</label>
+                <input type="text" id="employeeName" name="eName" required />
+                
+                <label htmlFor="taskDescription">Task:</label>
+                <input type="text" id="taskDescription" name="TaskDescription" required />
+                
+                <label htmlFor="StartDate">Start Date:</label>
+                <input type="date" id="StartDate" name="StartDate" />
+                
+                <label htmlFor="EndDate">End Date:</label>
+                <input type="date" id="EndDate" name="EndDate" />
+                
+                <button type="submit">Add</button>
+                <button type="button" onClick={closePopup}>Cancel</button>
+            </form>
+        </div>
+    </>
+)}   
             <button onClick={signOut}>Sign out</button>
         </main>
     );
