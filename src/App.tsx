@@ -8,6 +8,9 @@ function App() {
     const [loading, setLoading] = useState(false);
     const [noTasksMessage, setNoTasksMessage] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [showAddPopup, setShowAddPopup] = useState(false);
+    const [popupTasks, setPopupTasks] = useState<any[]>([]);
+    const [messagePopup, setMessagePopup] = useState<{ show: boolean, content: string }>({ show: false, content: '' });
 
     const fetchTasksForEmployee = async (employeeId: string) => {
         setLoading(true);
@@ -43,17 +46,18 @@ function App() {
     }, [employeeId]);
 
     const showAddTaskPopup = () => setShowAddPopup(true);
+    const closePopup = () => setShowAddPopup(false);
 
-        const handleAddTask = async (e) => {
+    const handleAddTask = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const formData = new FormData(e.target);
-        const params = new URLSearchParams(formData).toString();
+        const formData = new FormData(e.currentTarget);
+        const params = new URLSearchParams(formData as any).toString();
 
         try {
-            const response = await fetch(e.target.action, {
-                method: e.target.method,
+            const response = await fetch(e.currentTarget.action, {
+                method: e.currentTarget.method,
                 headers: {
-                    'Content-Type': e.target.enctype,
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: params,
             });
@@ -86,7 +90,6 @@ function App() {
         setPopupTasks(tasksArray);
     };
 
-
     return (
         <main>
             <h1>Employee Task List</h1>
@@ -99,36 +102,38 @@ function App() {
             {noTasksMessage && <div id="noTasksMessage">No tasks found for the Employee ID.</div>}
             
             <div id="buttonContainer">
-                <button onClick={showAddTaskPopup>Add Task</button>&nbsp;&nbsp;
+                <button onClick={showAddTaskPopup}>Add Task</button>&nbsp;&nbsp;
                 <button>Remove Task</button>
             </div>
-                {showAddPopup && (
-    <>
-        <div className="overlay" onClick={closePopup}></div>
-        <div className={`popup ${showAddPopup ? 'show' : ''}`}>
-            <h3>Add New Task</h3>
-            <form id="taskForm" action="https://bi3hh9apo0.execute-api.ap-south-1.amazonaws.com/S1/Addtask" method="POST" onSubmit={handleAddTask}>
-                <label htmlFor="employeeID">Employee ID:</label>
-                <input type="text" id="employeeID" name="eID" required />
-                
-                <label htmlFor="employeeName">Employee Name:</label>
-                <input type="text" id="employeeName" name="eName" required />
-                
-                <label htmlFor="taskDescription">Task:</label>
-                <input type="text" id="taskDescription" name="TaskDescription" required />
-                
-                <label htmlFor="StartDate">Start Date:</label>
-                <input type="date" id="StartDate" name="StartDate" />
-                
-                <label htmlFor="EndDate">End Date:</label>
-                <input type="date" id="EndDate" name="EndDate" />
-                
-                <button type="submit">Add</button>
-                <button type="button" onClick={closePopup}>Cancel</button>
-            </form>
-        </div>
-    </>
-)}   
+            
+            {showAddPopup && (
+                <>
+                    <div className="overlay" onClick={closePopup}></div>
+                    <div className={`popup ${showAddPopup ? 'show' : ''}`}>
+                        <h3>Add New Task</h3>
+                        <form id="taskForm" action="https://bi3hh9apo0.execute-api.ap-south-1.amazonaws.com/S1/Addtask" method="POST" onSubmit={handleAddTask}>
+                            <label htmlFor="employeeID">Employee ID:</label>
+                            <input type="text" id="employeeID" name="eID" required />
+                            
+                            <label htmlFor="employeeName">Employee Name:</label>
+                            <input type="text" id="employeeName" name="eName" required />
+                            
+                            <label htmlFor="taskDescription">Task:</label>
+                            <input type="text" id="taskDescription" name="TaskDescription" required />
+                            
+                            <label htmlFor="StartDate">Start Date:</label>
+                            <input type="date" id="StartDate" name="StartDate" />
+                            
+                            <label htmlFor="EndDate">End Date:</label>
+                            <input type="date" id="EndDate" name="EndDate" />
+                            
+                            <button type="submit">Add</button>
+                            <button type="button" onClick={closePopup}>Cancel</button>
+                        </form>
+                    </div>
+                </>
+            )}   
+            
             <button onClick={signOut}>Sign out</button>
         </main>
     );
