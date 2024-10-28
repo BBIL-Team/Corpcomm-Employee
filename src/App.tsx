@@ -9,7 +9,6 @@ function App() {
     const [noTasksMessage, setNoTasksMessage] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [showAddPopup, setShowAddPopup] = useState(false);
-    const [popupTasks, setPopupTasks] = useState<any[]>([]);
     const [messagePopup, setMessagePopup] = useState<{ show: boolean, content: string }>({ show: false, content: '' });
 
     const fetchTasksForEmployee = async (employeeId: string) => {
@@ -70,24 +69,6 @@ function App() {
             console.error('Error adding task:', error);
             setMessagePopup({ show: true, content: 'Failed to add task.' });
         }
-    };
-
-    const populatePopupTable = () => {
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = tasks;
-        const rows = tempDiv.querySelectorAll('tr');
-
-        const tasksArray = Array.from(rows).slice(1).map(row => ({
-            employeeName: row.children[1]?.innerText || '',
-            taskDescription: row.children[2]?.innerText || '',
-            startDate: row.children[3]?.innerText || '',
-            endDate: row.children[4]?.innerText || '',
-            rating: row.children[5]?.innerText || '',
-            remarks: row.children[6]?.innerText || '',
-            row,
-        }));
-
-        setPopupTasks(tasksArray);
     };
 
     return (
