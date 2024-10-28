@@ -47,17 +47,17 @@ function App() {
     }, [employeeId]);
 
     const showAddTaskPopup = () => setShowAddPopup(true);
-        const showRemoveTaskPopup = () => {
+    const showRemoveTaskPopup = () => {
         populatePopupTable();
         setShowRemovePopup(true);
     };
 
-    const closePopup = () => setShowAddPopup(false);
+    const closePopup = () => {
+        setShowAddPopup(false);
         setShowRemovePopup(false);
         setMessagePopup({ show: false, content: '' });
         setPopupTasks([]);
     };
-
 
     const handleAddTask = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -82,25 +82,26 @@ function App() {
             setMessagePopup({ show: true, content: 'Failed to add task.' });
         }
     };
-        const populatePopupTable = () => {
+
+    const populatePopupTable = () => {
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = tasks;
         const rows = tempDiv.querySelectorAll('tr');
 
         const tasksArray = Array.from(rows).slice(1).map(row => ({
-            employeeName: row.children[1]?.innerText || '',
-            taskDescription: row.children[2]?.innerText || '',
-            startDate: row.children[3]?.innerText || '',
-            endDate: row.children[4]?.innerText || '',
-            rating: row.children[5]?.innerText || '',
-            remarks: row.children[6]?.innerText || '',
+            employeeName: (row.children[1] as HTMLElement)?.innerText || '',
+            taskDescription: (row.children[2] as HTMLElement)?.innerText || '',
+            startDate: (row.children[3] as HTMLElement)?.innerText || '',
+            endDate: (row.children[4] as HTMLElement)?.innerText || '',
+            rating: (row.children[5] as HTMLElement)?.innerText || '',
+            remarks: (row.children[6] as HTMLElement)?.innerText || '',
             row,
         }));
 
         setPopupTasks(tasksArray);
     };
 
-    const removeTask = async (employeeName, taskDescription) => {
+    const removeTask = async (employeeName: string, taskDescription: string) => {
         const apiUrl = 'https://oje3cr7sy2.execute-api.ap-south-1.amazonaws.com/V1/RemoveTask';
         const plainText = `${employeeName},${taskDescription}`;
 
@@ -126,7 +127,6 @@ function App() {
         }
     };
 
-
     return (
         <main>
             <h1>Employee Task List</h1>
@@ -140,7 +140,7 @@ function App() {
             
             <div id="buttonContainer">
                 <button onClick={showAddTaskPopup}>Add Task</button>&nbsp;&nbsp;
-                <button onClick={showRemoveTaskPopup>Remove Task</button>
+                <button onClick={showRemoveTaskPopup}>Remove Task</button>
             </div>
             
             {showAddPopup && (
@@ -171,41 +171,41 @@ function App() {
                 </>
             )}
             {showRemovePopup && (
-                    <div className="popup1">
-                        <h3>Remove Task</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Employee ID</th>
-                                    <th>Employee Name</th>
-                                    <th>Task Description</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Rating</th>
-                                    <th>Remarks</th>
-                                    <th>Action</th>
+                <div className="popup1">
+                    <h3>Remove Task</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Task Description</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Rating</th>
+                                <th>Remarks</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {popupTasks.map((task, index) => (
+                                <tr key={index}>
+                                    <td>{employeeId}</td>
+                                    <td>{task.employeeName}</td>
+                                    <td>{task.taskDescription}</td>
+                                    <td>{task.startDate}</td>
+                                    <td>{task.endDate}</td>
+                                    <td>{task.rating}</td>
+                                    <td>{task.remarks}</td>
+                                    <td>
+                                        <button onClick={() => removeTask(task.employeeName, task.taskDescription)}>X</button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {popupTasks.map((task, index) => (
-                                    <tr key={index}>
-                                        <td>{employeeId}</td>
-                                        <td>{task.employeeName}</td>
-                                        <td>{task.taskDescription}</td>
-                                        <td>{task.startDate}</td>
-                                        <td>{task.endDate}</td>
-                                        <td>{task.rating}</td>
-                                        <td>{task.remarks}</td>
-                                        <td>
-                                            <button onClick={() => removeTask(task.employeeName, task.taskDescription)}>X</button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <button onClick={closePopup}>Close</button>
-                    </div>
-                )}
+                            ))}
+                        </tbody>
+                    </table>
+                    <button onClick={closePopup}>Close</button>
+                </div>
+            )}
 
             {messagePopup.show && (
                 <div className="popup">
