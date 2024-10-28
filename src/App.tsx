@@ -146,7 +146,11 @@ function App() {
     };
 
     return (
-        <main>
+        <main style={{ top: '0', display: 'flex', flexDirection: 'column', padding: '0', width: '90vw', margin: '0', boxSizing: 'border-box', backgroundColor: '#E2E2E2', position: 'fixed',left: '50%',transform: 'translateX(-50%)'}}>
+      <header>
+        <img src="https://www.bharatbiotech.com/images/bharat-biotech-logo.jpg" alt="Company Logo" className="logo" />
+         <button style={{ marginLeft: 'auto' }} onClick={signOut}>Sign out</button>
+      </header>
             <h1>Employee Task List</h1>
             
             {loading && <div id="loading">Loading tasks...</div>}
