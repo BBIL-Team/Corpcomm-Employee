@@ -132,10 +132,16 @@ function App() {
             const data = await response.json();
             setMessagePopup({ show: true, content: data.message || 'Task removed successfully.' });
             fetchTasksForEmployee(employeeId);
-        } catch (error) {
-            console.error('Error:', error);
-            setMessagePopup({ show: true, content: 'Request failed: ' + error.message });
-        }
+        }catch (error: unknown) {
+    if (error instanceof Error) {
+        console.error('Error fetching tasks:', error.message);
+        setErrorMessage('Failed to fetch tasks.');
+    } else {
+        console.error('Unexpected error:', error);
+        setErrorMessage('An unexpected error occurred.');
+    }
+}
+
     };
 
     return (
