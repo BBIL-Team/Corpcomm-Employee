@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import './App.css'; // Import the CSS file
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
 interface Task {
