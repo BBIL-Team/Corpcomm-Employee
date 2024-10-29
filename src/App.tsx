@@ -151,6 +151,7 @@ function App() {
         <img src="https://www.bharatbiotech.com/images/bharat-biotech-logo.jpg" alt="Company Logo" className="logo" />
          <button style={{ marginLeft: 'auto' }} onClick={signOut}>Sign out</button>
       </header>
+            <div className="container">
             <h1 style={{ textAlign: 'center' }}>Employee Task List</h1>
             
             {loading && <div id="loading">Loading tasks...</div>}
@@ -235,6 +236,7 @@ function App() {
                     <button onClick={() => setMessagePopup({ ...messagePopup, show: false })}>Close</button>
                 </div>
             )}
+        </div>
         </main>
     );
 }
