@@ -235,8 +235,6 @@ function App() {
                     <button onClick={() => setMessagePopup({ ...messagePopup, show: false })}>Close</button>
                 </div>
             )}
-            
-            <button onClick={signOut}>Sign out</button>
         </main>
     );
 }
