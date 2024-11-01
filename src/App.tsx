@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
-function App() {
-    const { signOut } = useAuthenticator();
 const App: React.FC = () => {
+  const { signOut } = useAuthenticator();
   const [file, setFile] = useState<File | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +42,7 @@ const App: React.FC = () => {
   return (
     <div>
       <h1>BBIL Production Department - Data Upload Interface</h1>
-        <button style={{ marginLeft: 'auto' }} onClick={signOut}>Sign out</button>
+      <button style={{ marginLeft: 'auto' }} onClick={signOut}>Sign out</button>
       <form onSubmit={handleSubmit}>
         <label><strong>Select a CSV file to upload:</strong></label>
         <br /><br />
@@ -63,7 +62,6 @@ const App: React.FC = () => {
       </form>
     </div>
   );
-};
 };
 
 export default App;
