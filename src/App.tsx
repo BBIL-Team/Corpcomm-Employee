@@ -152,7 +152,7 @@ function App() {
          <button style={{ marginLeft: 'auto' }} onClick={signOut}>Sign out</button>
       </header>
             <div className="container">
-            <h1 style={{ textAlign: 'center' }}>{user?.signInDetails?.loginId}'s Employee Task List</h1>
+            <h1 style={{ textAlign: 'center' }}> Employee Task List</h1>
             
             {loading && <div id="loading">Loading tasks...</div>}
             {errorMessage && <div id="errorMessage">{errorMessage}</div>}
