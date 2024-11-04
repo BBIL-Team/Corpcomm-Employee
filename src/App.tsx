@@ -13,7 +13,7 @@ interface Task {
 }
 
 function App() {
-    const { user, signOut } = useAuthenticator();
+    const { signOut } = useAuthenticator();
     const [tasks, setTasks] = useState<string>(''); 
     const [loading, setLoading] = useState(false);
     const [noTasksMessage, setNoTasksMessage] = useState(false);
@@ -24,8 +24,8 @@ function App() {
     const [messagePopup, setMessagePopup] = useState<{ show: boolean, content: string }>({ show: false, content: '' });
 
     // Extract employee ID and name from user attributes if available
-    const employeeId = user?.attributes?.['custom:employeeId'] || ''; // Replace with your custom attribute key
-    const employeeName = user?.attributes?.['name'] || ''; // Replace with the attribute key for the employee name
+    //const employeeId = user?.attributes?.['custom:employeeId'] || ''; // Replace with your custom attribute key
+    //const employeeName = user?.attributes?.['name'] || ''; // Replace with the attribute key for the employee name
 
     const fetchTasksForEmployee = async (employeeId: string) => {
         setLoading(true);
