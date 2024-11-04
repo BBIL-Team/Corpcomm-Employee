@@ -13,7 +13,7 @@ interface Task {
 }
 
 function App() {
-    const { signOut } = useAuthenticator();
+    const { user, signOut } = useAuthenticator();
     const employeeId = '10005315'; 
     const [tasks, setTasks] = useState<string>(''); 
     const [loading, setLoading] = useState(false);
