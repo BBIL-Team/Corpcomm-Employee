@@ -1,31 +1,29 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
-// STEP 1: Define the schema for employee tasks
+/* Define the data model */
 const schema = a.schema({
-  EmployeeTask: a
+  Task: a
     .model({
-      employeeID: a.string(),
       employeeName: a.string(),
       taskDescription: a.string(),
-      startDate: a.string(),
+      startDate: a.string(), // assuming dates are stored as strings; change to a.date() if needed
       endDate: a.string(),
-      rating: a.string().optional(), // Optional field
-      remarks: a.string().optional(), // Optional field
-    }).authorization(allow => [allow.owner()]),
-    ]),
+      rating: a.string(),
+      remarks: a.string(),
+    })
+    .authorization((allow) => [allow.publicApiKey()]),
 });
 
+/* Define the schema type */
 export type Schema = ClientSchema<typeof schema>;
 
-// STEP 2: Configure the data client with API key authorization
+/* Define the data configuration */
 export const data = defineData({
   schema,
   authorizationModes: {
-        defaultAuthorizationMode: 'userPool',
+    defaultAuthorizationMode: "apiKey",
+    apiKeyAuthorizationMode: {
+      expiresInDays: 30,
     },
   },
 });
-
-// STEP 3: Connect this data client in your frontend to make CRUD operations
-// Example in React:
-// const client = generateClient<Schema>() // use this Data client for CRUDL requests
