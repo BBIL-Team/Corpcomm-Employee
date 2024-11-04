@@ -142,3 +142,6 @@ button:hover {
     background: rgba(0, 0, 0, 0.5);
     z-index: 999;
 }
+.amplify-tabs {
+  display: none;
+}
