@@ -145,3 +145,11 @@ button:hover {
 .amplify-tabs {
   display: none;
 }
+.task-summary {
+    margin-left: 20px;  /* Space between the photo and the task summary */
+    text-align: left;  /* Align the text to the left */
+}
+
+.task-summary p {
+    margin: 5px 0;  /* Add some space between the text elements */
+}
