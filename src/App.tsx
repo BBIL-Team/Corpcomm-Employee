@@ -173,7 +173,18 @@ function App() {
                 <h1 style={{ textAlign: 'center' }}>Employee Task List</h1>
 
                  <div className="employee-details">
-                <img src={employeePhotoUrl} alt="Employee" className="employee-photo" />
+                <img
+                    src={employeePhotoUrl}
+                    alt="Employee"
+                    className="employee-photo"
+                    style={{
+                    width: '10px',  // Adjust the size here
+                    height: '10px',
+                    objectFit: 'cover', // Optional, to ensure the image covers the area properly
+                    borderRadius: '50%'  // Optional, to make it circular
+                    }}
+                />
+
                 <div className="task-summary">
                     <p><strong>Total Tasks:</strong> {totalTasks}</p>
                     <p><strong>Tasks Completed:</strong> {tasksCompleted}</p>
