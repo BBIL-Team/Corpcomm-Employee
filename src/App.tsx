@@ -44,6 +44,7 @@ function App() {
             const data = await response.text();
             if (data.trim() !== '') {
                 setTasks(data);
+                calculateTaskCounts(data);
                 setNoTasksMessage(false);
             } else {
                 setNoTasksMessage(true);
