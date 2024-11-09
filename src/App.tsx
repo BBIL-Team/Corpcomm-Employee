@@ -10,6 +10,7 @@ interface Task {
     rating: string;
     remarks: string;
     row: HTMLTableRowElement;
+    photoUrl: string; // Add photo URL to the Task interface
 }
 
 function App() {
@@ -45,7 +46,7 @@ function App() {
             } else {
                 setNoTasksMessage(true);
             }
-        } catch (error: unknown) {  // Update to handle 'unknown' type
+        } catch (error: unknown) {
             console.error('Error fetching tasks:', error);
             setErrorMessage('Failed to fetch tasks.');
         } finally {
@@ -94,24 +95,24 @@ function App() {
         }
     };
 
-   const populatePopupTable = () => {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = tasks;
-    const rows = tempDiv.querySelectorAll('tr');
+    const populatePopupTable = () => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = tasks;
+        const rows = tempDiv.querySelectorAll('tr');
 
-    const tasksArray: Task[] = Array.from(rows).slice(1).map(row => ({
-        employeeName: (row.children[1] as HTMLElement).innerText || '',
-        taskDescription: (row.children[2] as HTMLElement).innerText || '',
-        startDate: (row.children[3] as HTMLElement).innerText || '',
-        endDate: (row.children[4] as HTMLElement).innerText || '',
-        rating: (row.children[5] as HTMLElement).innerText || '',
-        remarks: (row.children[6] as HTMLElement).innerText || '',
-        row: row as HTMLTableRowElement,
-    }));
+        const tasksArray: Task[] = Array.from(rows).slice(1).map(row => ({
+            employeeName: (row.children[1] as HTMLElement).innerText || '',
+            taskDescription: (row.children[2] as HTMLElement).innerText || '',
+            startDate: (row.children[3] as HTMLElement).innerText || '',
+            endDate: (row.children[4] as HTMLElement).innerText || '',
+            rating: (row.children[5] as HTMLElement).innerText || '',
+            remarks: (row.children[6] as HTMLElement).innerText || '',
+            row: row as HTMLTableRowElement,
+            photoUrl: 'https://main.dr3q9wxg936nd.amplifyapp.com/Corp Comm/Surya.jpeg' // Replace with actual URLs for each employee
+        }));
 
-    setPopupTasks(tasksArray);
-};
-
+        setPopupTasks(tasksArray);
+    };
 
     const removeTask = async (employeeName: string, taskDescription: string) => {
         const apiUrl = 'https://oje3cr7sy2.execute-api.ap-south-1.amazonaws.com/V1/RemoveTask';
@@ -133,110 +134,72 @@ function App() {
             const data = await response.json();
             setMessagePopup({ show: true, content: data.message || 'Task removed successfully.' });
             fetchTasksForEmployee(employeeId);
-        }catch (error: unknown) {
-    if (error instanceof Error) {
-        console.error('Error fetching tasks:', error.message);
-        setErrorMessage('Failed to fetch tasks.');
-    } else {
-        console.error('Unexpected error:', error);
-        setErrorMessage('An unexpected error occurred.');
-    }
-}
-
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error('Error fetching tasks:', error.message);
+                setErrorMessage('Failed to fetch tasks.');
+            } else {
+                console.error('Unexpected error:', error);
+                setErrorMessage('An unexpected error occurred.');
+            }
+        }
     };
 
     return (
-        <main style={{ top: '0', display: 'flex', flexDirection: 'column', padding: '0', width: '90vw', margin: '0', boxSizing: 'border-box', backgroundColor: '#FFF', position: 'relative',left: '50%',transform: 'translateX(-50%)'}}>
-      <header>
-        <img src="https://www.bharatbiotech.com/images/bharat-biotech-logo.jpg" alt="Company Logo" className="logo" />
-         <button style={{ marginLeft: 'auto' }} onClick={signOut}>Sign out</button>
-      </header>
+        <main style={{ top: '0', display: 'flex', flexDirection: 'column', padding: '0', width: '90vw', margin: '0', boxSizing: 'border-box', backgroundColor: '#FFF', position: 'relative', left: '50%', transform: 'translateX(-50%)'}}>
+            <header>
+                <img src="https://www.bharatbiotech.com/images/bharat-biotech-logo.jpg" alt="Company Logo" className="logo" />
+                <button style={{ marginLeft: 'auto' }} onClick={signOut}>Sign out</button>
+            </header>
             <div className="container">
-            <h1 style={{ textAlign: 'center' }}> Employee Task List</h1>
-            
-            {loading && <div id="loading">Loading tasks...</div>}
-            {errorMessage && <div id="errorMessage">{errorMessage}</div>}
+                <h1 style={{ textAlign: 'center' }}>Employee Task List</h1>
+                
+                {loading && <div id="loading">Loading tasks...</div>}
+                {errorMessage && <div id="errorMessage">{errorMessage}</div>}
 
-            <div id="cardContainer" dangerouslySetInnerHTML={{ __html: tasks }} />
-            
-            {noTasksMessage && <div id="noTasksMessage">No tasks found for the Employee ID.</div>}
-            &nbsp;&nbsp;
-            <div id="buttonContainer">
-                <button onClick={showAddTaskPopup}>Add Task</button>&nbsp;&nbsp;
-                <button onClick={showRemoveTaskPopup}>Remove Task</button>
-            </div>
-            
-            {showAddPopup && (
-                <>
-                    <div className="overlay" onClick={closePopup}></div>
-                    <div className={`popup ${showAddPopup ? 'show' : ''}`}>
-                        <h3>Add New Task</h3>
-                        <form id="taskForm" action="https://bi3hh9apo0.execute-api.ap-south-1.amazonaws.com/S1/Addtask" method="POST" onSubmit={handleAddTask}>
-                            <label htmlFor="employeeID">Employee ID:</label>
-                            <input type="text" id="employeeID" name="eID" required />
-                            
-                            <label htmlFor="employeeName">Employee Name:</label>
-                            <input type="text" id="employeeName" name="eName" required />
-                            
-                            <label htmlFor="taskDescription">Task:</label>
-                            <input type="text" id="taskDescription" name="TaskDescription" required />
-                            
-                            <label htmlFor="StartDate">Start Date:</label>
-                            <input type="date" id="StartDate" name="StartDate" />
-                            
-                            <label htmlFor="EndDate">End Date:</label>
-                            <input type="date" id="EndDate" name="EndDate" />
-                            
-                            <button type="submit">Add</button>
-                            <button type="button" onClick={closePopup}>Cancel</button>
-                        </form>
-                    </div>
-                </>
-            )}
-            {showRemovePopup && (
-                <div className="popup1">
-                    <h3>Remove Task</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Employee ID</th>
-                                <th>Employee Name</th>
-                                <th>Task Description</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Rating</th>
-                                <th>Remarks</th>
-                                <th>Action</th>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee Photo</th>
+                            <th>Employee Name</th>
+                            <th>Task Description</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Rating</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {popupTasks.map((task, index) => (
+                            <tr key={index}>
+                                <td>
+                                    <img src={task.photoUrl} alt={`${task.employeeName}'s Photo`} style={{ width: '50px', height: '50px' }} />
+                                </td>
+                                <td>{task.employeeName}</td>
+                                <td>{task.taskDescription}</td>
+                                <td>{task.startDate}</td>
+                                <td>{task.endDate}</td>
+                                <td>{task.rating}</td>
+                                <td>{task.remarks}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {popupTasks.map((task, index) => (
-                                <tr key={index}>
-                                    <td>{employeeId}</td>
-                                    <td>{task.employeeName}</td>
-                                    <td>{task.taskDescription}</td>
-                                    <td>{task.startDate}</td>
-                                    <td>{task.endDate}</td>
-                                    <td>{task.rating}</td>
-                                    <td>{task.remarks}</td>
-                                    <td>
-                                        <button onClick={() => removeTask(task.employeeName, task.taskDescription)}>X</button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    <button onClick={closePopup}>Close</button>
-                </div>
-            )}
+                        ))}
+                    </tbody>
+                </table>
 
-            {messagePopup.show && (
-                <div className="popup">
-                    <p>{messagePopup.content}</p>
-                    <button onClick={() => setMessagePopup({ ...messagePopup, show: false })}>Close</button>
+                {noTasksMessage && <div id="noTasksMessage">No tasks found for the Employee ID.</div>}
+                
+                <div id="buttonContainer">
+                    <button onClick={showAddTaskPopup}>Add Task</button>
+                    <button onClick={showRemoveTaskPopup}>Remove Task</button>
                 </div>
-            )}
-        </div>
+
+                {messagePopup.show && (
+                    <div className="popup">
+                        <p>{messagePopup.content}</p>
+                        <button onClick={() => setMessagePopup({ ...messagePopup, show: false })}>Close</button>
+                    </div>
+                )}
+            </div>
         </main>
     );
 }
