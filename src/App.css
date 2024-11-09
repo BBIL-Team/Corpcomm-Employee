@@ -146,7 +146,7 @@ button:hover {
   display: none;
 }
 .task-summary {
-    margin-left: 20px;  /* Space between the photo and the task summary */
+    margin-left: 50px;  /* Space between the photo and the task summary */
     text-align: left;  /* Align the text to the left */
 }
 
