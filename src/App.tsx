@@ -54,6 +54,22 @@ function App() {
         }
     };
 
+    const calculateTaskCounts = (tasksHtml: string) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = tasksHtml;
+    const rows = Array.from(tempDiv.querySelectorAll('tr')).slice(1); // Skip header row
+    
+    setTotalTasks(rows.length); // Total tasks count is the number of rows
+
+    const completedCount = rows.filter(row => {
+        const rating = (row.children[5] as HTMLElement).innerText; // Rating column
+        const remarks = (row.children[6] as HTMLElement).innerText; // Remarks column
+        return rating && remarks; // Task is considered completed if both are present
+    }).length;
+
+    setTasksCompleted(completedCount); // Set the count of completed tasks
+};
+
     useEffect(() => {
         fetchTasksForEmployee(employeeId);
     }, [employeeId]);
@@ -153,10 +169,13 @@ function App() {
             <div className="container">
                 <h1 style={{ textAlign: 'center' }}>Employee Task List</h1>
 
-                {/* Display Employee Photo */}
-                <div className="employee-photo">
-                    <img src={employeePhotoUrl} alt="Employee Photo" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
+                 <div className="employee-details">
+                <img src={employeePhotoUrl} alt="Employee" className="employee-photo" />
+                <div className="task-summary">
+                    <p><strong>Total Tasks:</strong> {totalTasks}</p>
+                    <p><strong>Tasks Completed:</strong> {tasksCompleted}</p>
                 </div>
+            </div>
                 
                 {loading && <div id="loading">Loading tasks...</div>}
                 {errorMessage && <div id="errorMessage">{errorMessage}</div>}
