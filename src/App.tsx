@@ -157,6 +157,45 @@ function App() {
                 {loading && <div id="loading">Loading tasks...</div>}
                 {errorMessage && <div id="errorMessage">{errorMessage}</div>}
 
+                <div id="cardContainer" dangerouslySetInnerHTML={{ __html: tasks }} />
+            
+            {noTasksMessage && <div id="noTasksMessage">No tasks found for the Employee ID.</div>}
+            &nbsp;&nbsp;
+            <div id="buttonContainer">
+                <button onClick={showAddTaskPopup}>Add Task</button>&nbsp;&nbsp;
+                <button onClick={showRemoveTaskPopup}>Remove Task</button>
+            </div>
+            
+            {showAddPopup && (
+                <>
+                    <div className="overlay" onClick={closePopup}></div>
+                    <div className={`popup ${showAddPopup ? 'show' : ''}`}>
+                        <h3>Add New Task</h3>
+                        <form id="taskForm" action="https://bi3hh9apo0.execute-api.ap-south-1.amazonaws.com/S1/Addtask" method="POST" onSubmit={handleAddTask}>
+                            <label htmlFor="employeeID">Employee ID:</label>
+                            <input type="text" id="employeeID" name="eID" required />
+                            
+                            <label htmlFor="employeeName">Employee Name:</label>
+                            <input type="text" id="employeeName" name="eName" required />
+                            
+                            <label htmlFor="taskDescription">Task:</label>
+                            <input type="text" id="taskDescription" name="TaskDescription" required />
+                            
+                            <label htmlFor="StartDate">Start Date:</label>
+                            <input type="date" id="StartDate" name="StartDate" />
+                            
+                            <label htmlFor="EndDate">End Date:</label>
+                            <input type="date" id="EndDate" name="EndDate" />
+                            
+                            <button type="submit">Add</button>
+                            <button type="button" onClick={closePopup}>Cancel</button>
+                        </form>
+                    </div>
+                </>
+            )}
+            {showRemovePopup && (
+                <div className="popup1">
+                    <h3>Remove Task</h3>
                 <table>
                     <thead>
                         <tr>
@@ -181,27 +220,28 @@ function App() {
                                 <td>{task.endDate}</td>
                                 <td>{task.rating}</td>
                                 <td>{task.remarks}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-
-                {noTasksMessage && <div id="noTasksMessage">No tasks found for the Employee ID.</div>}
-                
-                <div id="buttonContainer">
-                    <button onClick={showAddTaskPopup}>Add Task</button>
-                    <button onClick={showRemoveTaskPopup}>Remove Task</button>
+                          <td>
+                                        <button onClick={() => removeTask(task.employeeName, task.taskDescription)}>X</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <button onClick={closePopup}>Close</button>
                 </div>
+            )}
 
-                {messagePopup.show && (
-                    <div className="popup">
-                        <p>{messagePopup.content}</p>
-                        <button onClick={() => setMessagePopup({ ...messagePopup, show: false })}>Close</button>
-                    </div>
-                )}
-            </div>
+            {messagePopup.show && (
+                <div className="popup">
+                    <p>{messagePopup.content}</p>
+                    <button onClick={() => setMessagePopup({ ...messagePopup, show: false })}>Close</button>
+                </div>
+            )}
+        </div>
         </main>
     );
 }
 
 export default App;
+
+
