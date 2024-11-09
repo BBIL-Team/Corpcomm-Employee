@@ -178,8 +178,8 @@ function App() {
                     alt="Employee"
                     className="employee-photo"
                     style={{
-                    width: '40px',  // Adjust the size here
-                    height: '30px',
+                    width: '100px',  // Adjust the size here
+                    height: '50px',
                     objectFit: 'cover', // Optional, to ensure the image covers the area properly
                     borderRadius: '50%'  // Optional, to make it circular
                     }}
