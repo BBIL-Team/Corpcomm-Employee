@@ -24,6 +24,8 @@ function App() {
     const [popupTasks, setPopupTasks] = useState<Task[]>([]);
     const [messagePopup, setMessagePopup] = useState<{ show: boolean, content: string }>({ show: false, content: '' });
     const employeePhotoUrl = "https://main.dr3q9wxg936nd.amplifyapp.com/Corp Comm/Surya.jpeg"; // Replace with the actual URL
+    const [totalTasks, setTotalTasks] = useState(0); // Total tasks count
+    const [tasksCompleted, setTasksCompleted] = useState(0); // Completed tasks count
 
     const fetchTasksForEmployee = async (employeeId: string) => {
         setLoading(true);
