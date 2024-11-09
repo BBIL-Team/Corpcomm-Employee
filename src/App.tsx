@@ -10,7 +10,6 @@ interface Task {
     rating: string;
     remarks: string;
     row: HTMLTableRowElement;
-    photoUrl: string; // Add photo URL to the Task interface
 }
 
 function App() {
@@ -24,6 +23,7 @@ function App() {
     const [showRemovePopup, setShowRemovePopup] = useState(false);
     const [popupTasks, setPopupTasks] = useState<Task[]>([]);
     const [messagePopup, setMessagePopup] = useState<{ show: boolean, content: string }>({ show: false, content: '' });
+    const employeePhotoUrl = "https://main.dr3q9wxg936nd.amplifyapp.com/Corp Comm/Surya.jpeg"; // Replace with the actual URL
 
     const fetchTasksForEmployee = async (employeeId: string) => {
         setLoading(true);
@@ -108,7 +108,6 @@ function App() {
             rating: (row.children[5] as HTMLElement).innerText || '',
             remarks: (row.children[6] as HTMLElement).innerText || '',
             row: row as HTMLTableRowElement,
-            photoUrl: 'https://main.dr3q9wxg936nd.amplifyapp.com/Corp Comm/Surya.jpeg' // Replace with actual URLs for each employee
         }));
 
         setPopupTasks(tasksArray);
@@ -153,6 +152,11 @@ function App() {
             </header>
             <div className="container">
                 <h1 style={{ textAlign: 'center' }}>Employee Task List</h1>
+
+                {/* Display Employee Photo */}
+                <div className="employee-photo">
+                    <img src={employeePhotoUrl} alt="Employee Photo" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
+                </div>
                 
                 {loading && <div id="loading">Loading tasks...</div>}
                 {errorMessage && <div id="errorMessage">{errorMessage}</div>}
@@ -211,9 +215,6 @@ function App() {
                     <tbody>
                         {popupTasks.map((task, index) => (
                             <tr key={index}>
-                                <td>
-                                    <img src={task.photoUrl} alt={`${task.employeeName}'s Photo`} style={{ width: '50px', height: '50px' }} />
-                                </td>
                                 <td>{task.employeeName}</td>
                                 <td>{task.taskDescription}</td>
                                 <td>{task.startDate}</td>
