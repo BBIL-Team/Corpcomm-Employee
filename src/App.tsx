@@ -172,7 +172,7 @@ function App() {
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                 {/* Left - Dashboard */}
                 <div style={{
-                    width: '30%', padding: '20px', borderRight: '1px solid #ccc', backgroundColor: '#f8f8f8'
+                    width: '30%', padding: '20px', borderRight: '1px solid #ccc', backgroundColor: '#f8f8f8', borderRadius: '8px'
                 }}>
                     <h2>Employee Dashboard</h2>
                     <div className="employee-details" style={{ textAlign: 'center' }}>
@@ -195,7 +195,9 @@ function App() {
                 </div>
 
                 {/* Right - Task Table */}
-                <div style={{ width: '65%', padding: '20px' }}>
+                <div style={{
+                    width: '65%', padding: '20px', backgroundColor: '#f8f8f8', borderRadius: '8px'
+                }}>
                     <h1>Employee Task List</h1>
 
                     {loading && <div id="loading">Loading tasks...</div>}
@@ -238,50 +240,6 @@ function App() {
                         </form>
                     </div>
                 </>
-            )}
-
-            {/* Popup for Remove Task */}
-            {showRemovePopup && (
-                <div className="popup1">
-                    <h3>Remove Task</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Employee Name</th>
-                                <th>Task Description</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Rating</th>
-                                <th>Remarks</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {popupTasks.map((task, index) => (
-                                <tr key={index}>
-                                    <td>{task.employeeName}</td>
-                                    <td>{task.taskDescription}</td>
-                                    <td>{task.startDate}</td>
-                                    <td>{task.endDate}</td>
-                                    <td>{task.rating}</td>
-                                    <td>{task.remarks}</td>
-                                    <td>
-                                        <button onClick={() => removeTask(task.employeeName, task.taskDescription)}>X</button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    <button onClick={closePopup}>Close</button>
-                </div>
-            )}
-
-            {/* Message Popup */}
-            {messagePopup.show && (
-                <div className="popup">
-                    <p>{messagePopup.content}</p>
-                    <button onClick={() => setMessagePopup({ ...messagePopup, show: false })}>Close</button>
-                </div>
             )}
         </main>
     );
