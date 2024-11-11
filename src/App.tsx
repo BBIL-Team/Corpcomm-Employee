@@ -197,7 +197,7 @@ function App() {
                         <p><strong>Designation:</strong> Graphic Designer</p>
                         <p><strong>Total Tasks:</strong> {totalTasks}</p>
                         <p><strong>Tasks Completed:</strong> {tasksCompleted}</p>
-                        <p><strong>Completion Percentage:</strong> {tasksCompletionPercentage}%</p>
+                        <p><strong>% Task Completed:</strong> {tasksCompletionPercentage}%</p>
                     </div>
                 </div>
 
