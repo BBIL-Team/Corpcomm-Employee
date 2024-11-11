@@ -58,25 +58,26 @@ function App() {
         }
     };
 
-    const calculateTaskCounts = (tasksHtml: string) => {
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = tasksHtml;
-        const rows = Array.from(tempDiv.querySelectorAll('tr')).slice(1); // Skip header row
-        
-        setTotalTasks(rows.length); // Total tasks count is the number of rows
+   const calculateTaskCounts = (tasksHtml: string) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = tasksHtml;
+    const rows = Array.from(tempDiv.querySelectorAll('tr')).slice(1); // Skip header row
+    
+    const totalTasksCount = rows.length; // Correctly declare total as totalTasksCount
+    setTotalTasks(totalTasksCount);
 
-        const completedCount = rows.filter(row => {
-            const rating = (row.children[5] as HTMLElement).innerText; // Rating column
-            const remarks = (row.children[6] as HTMLElement).innerText; // Remarks column
-            return rating && remarks; // Task is considered completed if both are present
-        }).length;
+    const completedCount = rows.filter(row => {
+        const rating = (row.children[5] as HTMLElement).innerText; // Rating column
+        const remarks = (row.children[6] as HTMLElement).innerText; // Remarks column
+        return rating && remarks; // Task is considered completed if both are present
+    }).length;
 
-        setTasksCompleted(completedCount); // Set the count of completed tasks
+    setTasksCompleted(completedCount); // Set the count of completed tasks
 
-         // Calculate the percentage of tasks completed
-        const completionPercentage = total > 0 ? (completedCount / total) * 100 : 0;
-        setTasksCompletionPercentage(Math.round(completionPercentage)); // Set the percentage of completed tasks
-    };
+    // Calculate the percentage of tasks completed
+    const completionPercentage = totalTasksCount > 0 ? (completedCount / totalTasksCount) * 100 : 0;
+    setTasksCompletionPercentage(Math.round(completionPercentage)); // Set the percentage of completed tasks
+};
 
     useEffect(() => {
         fetchTasksForEmployee(employeeId);
