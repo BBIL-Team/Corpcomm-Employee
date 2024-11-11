@@ -26,6 +26,7 @@ function App() {
     const employeePhotoUrl = "https://main.dr3q9wxg936nd.amplifyapp.com/Corp Comm/Surya.jpeg"; // Replace with the actual URL
     const [totalTasks, setTotalTasks] = useState(0); // Total tasks count
     const [tasksCompleted, setTasksCompleted] = useState(0); // Completed tasks count
+    const [tasksCompletionPercentage, setTasksCompletionPercentage] = useState(0); // Percentage of completed tasks
 
     const fetchTasksForEmployee = async (employeeId: string) => {
         setLoading(true);
@@ -71,6 +72,10 @@ function App() {
         }).length;
 
         setTasksCompleted(completedCount); // Set the count of completed tasks
+
+         // Calculate the percentage of tasks completed
+        const completionPercentage = total > 0 ? (completedCount / total) * 100 : 0;
+        setTasksCompletionPercentage(Math.round(completionPercentage)); // Set the percentage of completed tasks
     };
 
     useEffect(() => {
@@ -191,10 +196,7 @@ function App() {
                         <p><strong>Designation:</strong> Graphic Designer</p>
                         <p><strong>Total Tasks:</strong> {totalTasks}</p>
                         <p><strong>Tasks Completed:</strong> {tasksCompleted}</p>
-                        //<div className="task-summary" style={{ marginTop: '20px' }}>
-                        //<p><strong>Total Tasks:</strong> {totalTasks}</p>
-                        //<p><strong>Tasks Completed:</strong> {tasksCompleted}</p>
-                        </div>
+                        <p><strong>Completion Percentage:</strong> {tasksCompletionPercentage}%</p>
                     </div>
                 </div>
 
