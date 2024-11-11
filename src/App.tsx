@@ -58,20 +58,20 @@ function App() {
     };
 
     const calculateTaskCounts = (tasksHtml: string) => {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = tasksHtml;
-    const rows = Array.from(tempDiv.querySelectorAll('tr')).slice(1); // Skip header row
-    
-    setTotalTasks(rows.length); // Total tasks count is the number of rows
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = tasksHtml;
+        const rows = Array.from(tempDiv.querySelectorAll('tr')).slice(1); // Skip header row
+        
+        setTotalTasks(rows.length); // Total tasks count is the number of rows
 
-    const completedCount = rows.filter(row => {
-        const rating = (row.children[5] as HTMLElement).innerText; // Rating column
-        const remarks = (row.children[6] as HTMLElement).innerText; // Remarks column
-        return rating && remarks; // Task is considered completed if both are present
-    }).length;
+        const completedCount = rows.filter(row => {
+            const rating = (row.children[5] as HTMLElement).innerText; // Rating column
+            const remarks = (row.children[6] as HTMLElement).innerText; // Remarks column
+            return rating && remarks; // Task is considered completed if both are present
+        }).length;
 
-    setTasksCompleted(completedCount); // Set the count of completed tasks
-};
+        setTasksCompleted(completedCount); // Set the count of completed tasks
+    };
 
     useEffect(() => {
         fetchTasksForEmployee(employeeId);
@@ -164,45 +164,54 @@ function App() {
     };
 
     return (
-        <main style={{ top: '0', display: 'flex', flexDirection: 'column', padding: '0', width: '90vw', margin: '0', boxSizing: 'border-box', backgroundColor: '#FFF', position: 'relative', left: '50%', transform: 'translateX(-50%)'}}>
-            <header>
+        <main style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+            <header style={{ width: '100%' }}>
                 <img src="https://www.bharatbiotech.com/images/bharat-biotech-logo.jpg" alt="Company Logo" className="logo" />
                 <button style={{ marginLeft: 'auto' }} onClick={signOut}>Sign out</button>
             </header>
-            <div className="container">
-                <h1 style={{ textAlign: 'center' }}>Employee Task List</h1>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                {/* Left - Dashboard */}
+                <div style={{
+                    width: '30%', padding: '20px', borderRight: '1px solid #ccc', backgroundColor: '#f8f8f8'
+                }}>
+                    <h2>Employee Dashboard</h2>
+                    <div className="employee-details" style={{ textAlign: 'center' }}>
+                        <img
+                            src={employeePhotoUrl}
+                            alt="Employee"
+                            className="employee-photo"
+                            style={{
+                                width: '120px',
+                                height: '120px',
+                                objectFit: 'cover',
+                                borderRadius: '50%'
+                            }}
+                        />
+                        <div className="task-summary" style={{ marginTop: '20px' }}>
+                            <p><strong>Total Tasks:</strong> {totalTasks}</p>
+                            <p><strong>Tasks Completed:</strong> {tasksCompleted}</p>
+                        </div>
+                    </div>
+                </div>
 
-                 <div className="employee-details">
-                <img
-                    src={employeePhotoUrl}
-                    alt="Employee"
-                    className="employee-photo"
-                    style={{
-                    width: '100px',  // Adjust the size here
-                    height: '100px',
-                    objectFit: 'cover', // Optional, to ensure the image covers the area properly
-                    borderRadius: '50%'  // Optional, to make it circular
-                    }}
-                />
+                {/* Right - Task Table */}
+                <div style={{ width: '65%', padding: '20px' }}>
+                    <h1>Employee Task List</h1>
 
-                <div className="task-summary">
-                    <p><strong>Total Tasks:</strong> {totalTasks}</p>
-                    <p><strong>Tasks Completed:</strong> {tasksCompleted}</p>
+                    {loading && <div id="loading">Loading tasks...</div>}
+                    {errorMessage && <div id="errorMessage">{errorMessage}</div>}
+                    <div id="cardContainer" dangerouslySetInnerHTML={{ __html: tasks }} />
+                    
+                    {noTasksMessage && <div id="noTasksMessage">No tasks found for the Employee ID.</div>}
+                    
+                    <div id="buttonContainer">
+                        <button onClick={showAddTaskPopup}>Add Task</button>&nbsp;&nbsp;
+                        <button onClick={showRemoveTaskPopup}>Remove Task</button>
+                    </div>
                 </div>
             </div>
-                
-                {loading && <div id="loading">Loading tasks...</div>}
-                {errorMessage && <div id="errorMessage">{errorMessage}</div>}
 
-                <div id="cardContainer" dangerouslySetInnerHTML={{ __html: tasks }} />
-            
-            {noTasksMessage && <div id="noTasksMessage">No tasks found for the Employee ID.</div>}
-            &nbsp;&nbsp;
-            <div id="buttonContainer">
-                <button onClick={showAddTaskPopup}>Add Task</button>&nbsp;&nbsp;
-                <button onClick={showRemoveTaskPopup}>Remove Task</button>
-            </div>
-            
+            {/* Popup for Add Task */}
             {showAddPopup && (
                 <>
                     <div className="overlay" onClick={closePopup}></div>
@@ -230,31 +239,33 @@ function App() {
                     </div>
                 </>
             )}
+
+            {/* Popup for Remove Task */}
             {showRemovePopup && (
                 <div className="popup1">
                     <h3>Remove Task</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Employee Photo</th>
-                            <th>Employee Name</th>
-                            <th>Task Description</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Rating</th>
-                            <th>Remarks</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {popupTasks.map((task, index) => (
-                            <tr key={index}>
-                                <td>{task.employeeName}</td>
-                                <td>{task.taskDescription}</td>
-                                <td>{task.startDate}</td>
-                                <td>{task.endDate}</td>
-                                <td>{task.rating}</td>
-                                <td>{task.remarks}</td>
-                          <td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Employee Name</th>
+                                <th>Task Description</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Rating</th>
+                                <th>Remarks</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {popupTasks.map((task, index) => (
+                                <tr key={index}>
+                                    <td>{task.employeeName}</td>
+                                    <td>{task.taskDescription}</td>
+                                    <td>{task.startDate}</td>
+                                    <td>{task.endDate}</td>
+                                    <td>{task.rating}</td>
+                                    <td>{task.remarks}</td>
+                                    <td>
                                         <button onClick={() => removeTask(task.employeeName, task.taskDescription)}>X</button>
                                     </td>
                                 </tr>
@@ -265,17 +276,15 @@ function App() {
                 </div>
             )}
 
+            {/* Message Popup */}
             {messagePopup.show && (
                 <div className="popup">
                     <p>{messagePopup.content}</p>
                     <button onClick={() => setMessagePopup({ ...messagePopup, show: false })}>Close</button>
                 </div>
             )}
-        </div>
         </main>
     );
 }
 
 export default App;
-
-
