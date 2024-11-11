@@ -164,7 +164,7 @@ function App() {
     };
 
     return (
-        <main style={{ display: 'flex', justifyContent: 'center', padding: '20px', width: '100%' }}>
+        <main style={{ display: 'flex', justifyContent: 'center', padding: '20px', width: '90vw' }}>
             <header style={{ width: '100%' }}>
                 <img src="https://www.bharatbiotech.com/images/bharat-biotech-logo.jpg" alt="Company Logo" className="logo" />
                 <button style={{ marginLeft: 'auto' }} onClick={signOut}>Sign out</button>
@@ -189,9 +189,11 @@ function App() {
                         />
                         <p><strong>Employee Name:</strong> Surya</p>
                         <p><strong>Designation:</strong> Graphic Designer</p>
-                        <div className="task-summary" style={{ marginTop: '20px' }}>
-                            <p><strong>Total Tasks:</strong> {totalTasks}</p>
-                            <p><strong>Tasks Completed:</strong> {tasksCompleted}</p>
+                        <p><strong>Total Tasks:</strong> {totalTasks}</p>
+                        <p><strong>Tasks Completed:</strong> {tasksCompleted}</p>
+                        //<div className="task-summary" style={{ marginTop: '20px' }}>
+                        //<p><strong>Total Tasks:</strong> {totalTasks}</p>
+                        //<p><strong>Tasks Completed:</strong> {tasksCompleted}</p>
                         </div>
                     </div>
                 </div>
