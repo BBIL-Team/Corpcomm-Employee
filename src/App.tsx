@@ -174,7 +174,10 @@ function App() {
                 <div style={{
                     width: '30%', padding: '20px', borderRight: '1px solid #ccc', backgroundColor: '#f8f8f8', borderRadius: '8px'
                 }}>
-                    <h2>Employee Dashboard</h2>
+                    <h2>Employee Details</h2>
+                    <p>Employee Name: Surya</p>
+                    <p>Designation: Graphic Designer</p>
+                    
                     <div className="employee-details" style={{ textAlign: 'center' }}>
                         <img
                             src={employeePhotoUrl}
@@ -196,7 +199,7 @@ function App() {
 
                 {/* Right - Task Table */}
                 <div style={{
-                    width: '65%', padding: '20px', backgroundColor: '#f8f8f8', borderRadius: '8px'
+                    width: '75%', padding: '20px', backgroundColor: '#f8f8f8', borderRadius: '8px'
                 }}>
                     <h1>Employee Task List</h1>
 
