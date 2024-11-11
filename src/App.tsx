@@ -164,7 +164,7 @@ function App() {
     };
 
     return (
-        <main style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+        <main style={{ display: 'flex', justifyContent: 'center', padding: '20px', width: '100%' }}>
             <header style={{ width: '100%' }}>
                 <img src="https://www.bharatbiotech.com/images/bharat-biotech-logo.jpg" alt="Company Logo" className="logo" />
                 <button style={{ marginLeft: 'auto' }} onClick={signOut}>Sign out</button>
@@ -175,9 +175,6 @@ function App() {
                     width: '30%', padding: '20px', borderRight: '1px solid #ccc', backgroundColor: '#f8f8f8', borderRadius: '8px'
                 }}>
                     <h2>Employee Details</h2>
-                    <p>Employee Name: Surya</p>
-                    <p>Designation: Graphic Designer</p>
-                    
                     <div className="employee-details" style={{ textAlign: 'center' }}>
                         <img
                             src={employeePhotoUrl}
@@ -190,6 +187,8 @@ function App() {
                                 borderRadius: '50%'
                             }}
                         />
+                        <p><strong>Employee Name:</strong> Surya</p>
+                        <p><strong>Designation:</strong> Graphic Designer</p>
                         <div className="task-summary" style={{ marginTop: '20px' }}>
                             <p><strong>Total Tasks:</strong> {totalTasks}</p>
                             <p><strong>Tasks Completed:</strong> {tasksCompleted}</p>
