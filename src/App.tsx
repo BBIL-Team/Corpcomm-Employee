@@ -169,7 +169,7 @@ function App() {
                 <img src="https://www.bharatbiotech.com/images/bharat-biotech-logo.jpg" alt="Company Logo" className="logo" />
                 <button style={{ marginLeft: 'auto' }} onClick={signOut}>Sign out</button>
             </header>
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <div style={{ display: 'flex', width: '100%' }}>
                 {/* Left - Dashboard */}
                 <div style={{
                     width: '30%', padding: '20px', borderRight: '1px solid #ccc', backgroundColor: '#f8f8f8', borderRadius: '8px'
